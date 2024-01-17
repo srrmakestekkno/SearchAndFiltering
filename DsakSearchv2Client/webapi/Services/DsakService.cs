@@ -1,4 +1,6 @@
-﻿using webapi.DTOs;
+﻿using Microsoft.AspNetCore.Authentication;
+using System.Linq;
+using webapi.DTOs;
 using webapi.Interfaces;
 using webapi.Model;
 
@@ -15,60 +17,84 @@ namespace webapi.Services
 
         public async Task<SearchResult> FindDsaksMatchingSearchStrings(Search search)
         {
-            static List<Product> GetUniqueProducts(Dsak[] tickets)
-            {
-                var uniquProducts = new List<Product>();
-                foreach (var ticket in tickets)
-                {
-                    if (!uniquProducts.Any(x => x.ProductName == ticket.Product))
-                    {
-                        uniquProducts.Add(new Product(ticket.Id, ticket.Product, ticket.Status));
-                    }
-                }
+            //static List<Product> GetUniqueProducts(Dsak[] tickets)
+            //{
+            //    var uniquProducts = new List<Product>();
+            //    foreach (var ticket in tickets)
+            //    {
+            //        if (!uniquProducts.Any(x => x.ProductName == ticket.Product))
+            //        {
+            //            uniquProducts.Add(new Product(ticket.Id, ticket.Product, ticket.Status));
+            //        }
+            //    }
 
-                return uniquProducts;
-            }
+            //    return uniquProducts;
+            //}
 
-            static List<Company> GetUniqueCompanies(Dsak[] tickets)
-            {
-                var uniqueCompnanies = new List<Company>();
-                foreach (var ticket in tickets)
-                {
-                    if (!uniqueCompnanies.Any(x => x.Manager == ticket.Manager))
-                    {
-                        uniqueCompnanies.Add(new Company(ticket.Id, string.Empty, string.Empty, ticket.Manager));
-                    }
+            //static List<Company> GetUniqueCompanies(Dsak[] tickets)
+            //{
+            //    var uniqueCompnanies = new List<Company>();
+            //    foreach (var ticket in tickets)
+            //    {
+            //        if (!uniqueCompnanies.Any(x => x.Manager == ticket.Manager))
+            //        {
+            //            uniqueCompnanies.Add(new Company(ticket.Id, string.Empty, string.Empty, ticket.Manager));
+            //        }
 
-                }
-                return uniqueCompnanies;
-            }
+            //    }
+            //    return uniqueCompnanies;
+            //}
+            
+            //static List<DipsVersion> GetUniqueDipsVersions(Dsak[] tickets)
+            //{
+            //    var uniqueVersion = new List<DipsVersion>();
+
+            //    foreach (var ticket in tickets)
+            //    {
+            //        if (!uniqueVersion.Any(x => x.Name == ticket.Version))
+            //        {
+            //            uniqueVersion.Add(new DipsVersion(ticket.Version_Id, ticket.Version));
+            //        }
+            //    }
+
+            //    return uniqueVersion;
+            //}
+
             
             
 
             var searchResult = await _dbRepo.FindDsaksMatchingSearchStrings(search);
 
-            // Finner unike forvaltere og antall treff på disse i søket
-            //var companyOccurances = new Dictionary<string, int>();
-            //foreach (var item in searchResult.Tickets)
-            //{
-            //    if (!companyOccurances.ContainsKey(item.Company))
-            //    {
-            //        companyOccurances.Add(item.Company, 1);
-            //    }
-            //    else
-            //    {
-            //        companyOccurances[item.Company] += 1;
-            //    }
-            //}
-            //searchResult.UniqueCompanyOccurances = companyOccurances;
-            // End
-
-            var uniqueCompnanies = GetUniqueCompanies(searchResult.Tickets);
-            var uniquProducts = GetUniqueProducts(searchResult.Tickets);
+            var uniqueManagers= new List<Company>(); // Endre til å bruker manager
+            var uniquProducts = new List<Product>();            
+            var uniqueVersions = new List<DipsVersion>();
             
-            searchResult.Companies = uniqueCompnanies;
-            searchResult.NumberOfManagers = uniqueCompnanies.Count;
-            searchResult.Products = uniquProducts;            
+            foreach (var ticket in searchResult.Tickets)
+            {
+                if (!uniqueManagers.Any(x => x.Manager == ticket.Manager))
+                {
+                    uniqueManagers.Add(new Company(ticket.Id, string.Empty, string.Empty, ticket.Manager));
+                }
+
+                if (!uniquProducts.Any(x => x.ProductName == ticket.Product))
+                {
+                    uniquProducts.Add(new Product(ticket.Id, ticket.Product, ticket.Status));
+                }
+
+                if (!uniqueVersions.Any(x => x.Name == ticket.Version))
+                {
+                    uniqueVersions.Add(new DipsVersion( ticket.Version_Id, ticket.Version));
+                }                
+            }
+
+            //var uniqueCompnanies = GetUniqueCompanies(searchResult.Tickets);
+            //var uniquProducts = GetUniqueProducts(searchResult.Tickets);
+            //var uniqueDipsVersion = GetUniqueDipsVersions(searchResult.Tickets);
+            
+            searchResult.Companies = uniqueManagers;
+            //searchResult.NumberOfManagers = uniqueCompnanies.Count; // brukes ikke
+            searchResult.Products = uniquProducts;  
+            searchResult.Versions = uniqueVersions;
 
             return searchResult;
         }

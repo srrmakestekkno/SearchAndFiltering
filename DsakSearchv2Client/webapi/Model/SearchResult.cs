@@ -54,6 +54,7 @@ namespace webapi.Model
         public Dsak[] Tickets { get; }
         public IEnumerable<Company> Companies { get; set; }
         public IEnumerable<Product> Products { get; set; }
+        public IEnumerable<DipsVersion> Versions { get; set; }
         public int NumberOfTickets { get; }
         public int NumberOfManagers { get; set; }
         public Dictionary<string, int> UniqueCompanyOccurances { get; set; }

@@ -12,6 +12,7 @@
         public string? Pbi { get; }
         public int? Product_Id { get; }
         public string? Product { get; }
+        public string? Version { get; }
         public int? Version_Id { get; }
         public int Status { get; }
         public int? Front { get; }
