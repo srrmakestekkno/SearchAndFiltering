@@ -1,12 +1,9 @@
-﻿using webapi.DTOs;
-using webapi.Model;
+﻿using webapi.Model;
 
 namespace webapi.Interfaces
 {
     public interface IDsakService
     {
-        Task<SearchResult> FindDsaksMatchingSearchStrings(Search search);
-        Task<IEnumerable<Product>> GetAllProducts();
-        Task<IEnumerable<Company>> GetAllCompanies();
+        Task<SearchResult> FindDsaksMatchingSearchStrings(Search search, bool includeFront);
     }
 }

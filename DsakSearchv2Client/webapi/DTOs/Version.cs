@@ -1,11 +1,11 @@
 ﻿namespace webapi.DTOs
 {
-    public readonly struct DipsVersion
+    public readonly struct Version
     {
         public int? Id { get; }
         public string? Name { get; }
 
-        public DipsVersion(int? id, string? name)
+        public Version(int? id, string? name)
         {
             Id = id;
             Name = name;

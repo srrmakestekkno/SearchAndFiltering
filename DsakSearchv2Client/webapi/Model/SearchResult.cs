@@ -13,7 +13,7 @@ namespace webapi.Model
         {
             Header = header;
             Query = null;
-            Tickets = new Dsak[0];
+            Tickets = Array.Empty<Dsak>();
             NumberOfTickets = 0;
         }
 
@@ -43,20 +43,19 @@ namespace webapi.Model
         {
             if (numberOfTicketsFound > tickets.Length)
             {
-                Header = "Fant " + numberOfTicketsFound + " d:saker som matchet søket, de " + MaxItems + " første ble returnert";
+                Header = "Fant " + numberOfTicketsFound + " d:saker som matchet søket, de " + MaxItems + " nyeste ble returnert";
             }
 
             NumberOfTickets = numberOfTicketsFound;
         }
 
-        public string Header { get; }
-        public string Query { get; }
+        public string? Header { get; }
+        public string? Query { get; }
         public Dsak[] Tickets { get; }
-        public IEnumerable<Company> Companies { get; set; }
-        public IEnumerable<Product> Products { get; set; }
-        public IEnumerable<DipsVersion> Versions { get; set; }
-        public int NumberOfTickets { get; }
-        public int NumberOfManagers { get; set; }
-        public Dictionary<string, int> UniqueCompanyOccurances { get; set; }
+        public IEnumerable<Manager>? Managers { get; set; }
+        public IEnumerable<Company>? Companies { get; set; }
+        public IEnumerable<Product>? Products { get; set; }
+        public IEnumerable<DTOs.Version>? Versions { get; set; }
+        public int NumberOfTickets { get; }       
     }
 }

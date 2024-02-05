@@ -16,5 +16,7 @@
         public int? Version_Id { get; }
         public int Status { get; }
         public int? Front { get; }
+        public int Owner_Id { get; set; }
+        public string? Owner { get; set; }
     }
 }

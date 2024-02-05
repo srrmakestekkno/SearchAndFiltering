@@ -14,9 +14,9 @@ namespace webapi.Services
             return product;
         }
 
-        public static Company MapToCompany(CompanyDb company)
+        public static Manager MapToCompany(CompanyDb company)
         {
-            var dto = new Company(company.Id, company.CompanyName, company.CompanyType, company.Manager);
+            var dto = new Manager(company.Id, company.Manager);
 
             return dto;
         }
