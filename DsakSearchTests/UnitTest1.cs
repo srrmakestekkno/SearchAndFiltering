@@ -29,12 +29,6 @@ namespace DsakSearchTests
             Assert.Pass();
         }
 
-        private static Dsak[] GetTickets()
-        {
-            var tickets = new Dsak
-            [
-                new Dsak() { }
-            ];
-        }
+        
     }
 }
