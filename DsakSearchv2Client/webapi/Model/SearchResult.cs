@@ -12,8 +12,12 @@ namespace webapi.Model
         public SearchResult(string header)
         {
             Header = header;
-            Query = null;
+            Query = string.Empty;
             Tickets = Array.Empty<Dsak>();
+            Managers = Array.Empty<Manager>();
+            Companies = Array.Empty<Company>();
+            Products = Array.Empty<Product>();
+            Versions = Array.Empty<DTOs.Version>();
             NumberOfTickets = 0;
         }
 

@@ -40,7 +40,7 @@ public class TicketController : ControllerBase
 
             return searchResult;
         }
-
+        
         try
         {
             Request.HttpContext.Response.Headers.Add("callId", callId);

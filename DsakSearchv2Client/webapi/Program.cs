@@ -20,21 +20,38 @@ builder.Services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Directory.
 builder.Services.AddSingleton<IDsakConfiguration, AppConfig>();
 builder.Services.AddSingleton<IDsakService, DsakService>();
 builder.Services.AddSingleton<ISqlHelper, SqlHelper>();
-
 builder.Services.AddSingleton<IDsakDbRepo, DsakDbRepo>();
+
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy.WithOrigins("*")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowAnyOrigin();
+        });
+});
 
 var app = builder.Build();
 
+
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwagger();    
+    app.UseSwaggerUI(c =>
+    {
+        string swaggerJsonBasePath = string.IsNullOrWhiteSpace(c.RoutePrefix) ? "." : "..";
+        c.SwaggerEndpoint($"{swaggerJsonBasePath}/swagger/v1/swagger.json", "Ticket Search API");
+    });
 }
 
 app.UseHttpsRedirection();
-
-app.UseAuthorization();
+app.UseCors(MyAllowSpecificOrigins);
+//app.UseAuthorization();
 
 app.MapControllers();
 
